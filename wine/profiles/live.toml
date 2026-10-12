@@ -1,0 +1,5 @@
+description = "debug logging + Bluetooth packet capture against the real handset (auto rfcomm bind)"
+extends = "debug"
+
+[capture]
+enabled = true

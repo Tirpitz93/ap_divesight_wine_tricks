@@ -1,0 +1,11 @@
+description = "Default digging profile: serial (+comm) tracing, Qt debug categories, app Message Level raised"
+extends = "baseline"
+
+[wine]
+debug = "+timestamp,+pid,+tid,+seh,+loaddll,+debugstr,+comm,warn+all,warn-x11drv,warn-font,warn-keyboard,warn-xrandr"
+
+[patches]
+reg = ["ap-message-level-debug.reg"]
+
+[apps.divesight.env]
+QT_LOGGING_RULES = "*.debug=true;qt.*.debug=false;qt.serialport*=true;qt.network*=false"

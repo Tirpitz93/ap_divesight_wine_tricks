@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+; Factory default diagnostic level (value found in the prefix before experiments).
+
+[HKEY_CURRENT_USER\Software\AP\APDiveSight\Settings]
+"Message Level"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\AP\APCommunicator\Settings]
+"Message Level"=dword:00000000

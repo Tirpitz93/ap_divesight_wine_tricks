@@ -1,0 +1,8 @@
+description = "End-user style: minimal logging, app Message Level back to 0. Use to check behaviour without tracing overhead."
+extends = "baseline"
+
+[wine]
+debug = "-all,err+all"
+
+[patches]
+reg = ["ap-message-level-off.reg"]

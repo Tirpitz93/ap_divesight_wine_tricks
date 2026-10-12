@@ -1,0 +1,6 @@
+description = "debug logging against the mock handset (no rebreather needed); BT-like fragmentation"
+extends = "debug"
+
+[mock]
+enabled = true
+args = ["--chunk", "17", "--chunk-delay", "0.002", "--latency", "0.02"]

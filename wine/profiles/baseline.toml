@@ -1,0 +1,48 @@
+# Root profile. Every other profile should `extends = "baseline"`.
+# Merge rules: tables merge key-by-key, scalars/lists are replaced by the child.
+description = "Current known-working setup: ~/.wine, COM3 -> /dev/rfcomm0, default Wine logging"
+
+[wine]
+prefix = "~/.wine"
+binary = "wine"            # e.g. /opt/wine-staging/bin/wine to test another build
+winetricks = "winetricks"
+# WINEDEBUG. err/fixme are on by default in Wine; keep timestamps+pid/tid so lines can be correlated.
+debug = "+timestamp,+pid,+tid,+seh,+loaddll,+debugstr"
+
+[dll_overrides]            # -> WINEDLLOVERRIDES (per run, not persisted). name = "n,b" | "b" | "n" | ""
+
+[serial]                   # Persisted: HKLM\Software\Wine\Ports + dosdevices symlink
+com3 = "/dev/rfcomm0"
+
+[bluetooth]                # auto-bind /dev/rfcommN (from [serial]) before live runs; `./shim bt`
+mac = "00:06:66:19:21:61"  # AP Vision-2161 (bluetoothctl devices)
+channel = "auto"           # "auto" = SDP lookup (handset must be on), else a number
+fallback_channel = 1       # used if SDP lookup fails
+autobind = true
+
+[capture]                  # packet capture during the run (--capture). Output: capture.pcapng + decodes
+enabled = false
+tool = "dumpcap"           # "dumpcap" (rootless via wireshark group) | "btmon" (needs sudo -n)
+interfaces = ["bluetooth0"]  # HCI of the adapter. "bluetooth-monitor" = btmon view (all adapters + mgmt).
+                           # Avoid usbmonN: the BT dongle shares USB bus 1 with the keyboard (keystrokes!)
+settle_s = 1.0
+
+[mock]                     # fake handset on a pty (../inspiration/mockdevice.py). Enable per run with --mock
+enabled = false
+port = "com3"              # this COM port is pointed at the mock for the run, then restored
+cwd = ".."                 # relative to shim/: repo that contains the inspiration package
+command = [".venv/bin/python", "-m", "inspiration.mockdevice"]
+capture = "Download dive 422_New_ver.pcapng"   # relative to cwd; recorded real session to answer from
+args = []                  # e.g. ["--chunk", "17", "--chunk-delay", "0.005", "--unknown", "nak"]
+
+[patches]
+reg = []                   # files in wine/patches/reg/, imported before launch (persistent!)
+winetricks = []            # verbs, installed once (skipped if already in winetricks.log)
+
+[env]                      # extra environment for every app
+
+[apps.divesight.env]
+QT_FORCE_STDERR_LOGGING = "1"
+QT_MESSAGE_PATTERN = "[qt %{time process} %{type} %{category}] %{message}"
+
+[apps.communicator.env]

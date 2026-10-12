@@ -1,0 +1,9 @@
+description = "Very heavy: adds file/sync/timer tracing to catch overlapped-I/O and wait/timeout issues. Logs get huge."
+extends = "debug"
+
+[wine]
+debug = "+timestamp,+pid,+tid,+seh,+loaddll,+debugstr,+comm,+file,+sync,+threadpool,warn+all,warn-x11drv,warn-font,warn-keyboard,warn-xrandr"
+
+[apps.divesight.env]
+QT_LOGGING_RULES = "*.debug=true"
+QT_DEBUG_PLUGINS = "1"

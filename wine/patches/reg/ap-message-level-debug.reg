@@ -1,0 +1,12 @@
+Windows Registry Editor Version 5.00
+
+; Raise the apps' own diagnostic level. Both binaries read "Message Level"
+; (strings: "Debug Message Level %d", comboBoxDebugLevel in DiveSight).
+; UNVERIFIED: valid range unknown - 3 is a guess. Confirm via Ghidra and update.
+; Revert with ap-message-level-off.reg.
+
+[HKEY_CURRENT_USER\Software\AP\APDiveSight\Settings]
+"Message Level"=dword:00000003
+
+[HKEY_CURRENT_USER\Software\AP\APCommunicator\Settings]
+"Message Level"=dword:00000003

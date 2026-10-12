@@ -1,0 +1,37 @@
+# Static facts about the two target applications.
+# Things you want to *vary* between runs belong in profiles/, not here.
+#
+# exe        Windows path inside the prefix.
+# registry   Keys snapshotted before/after every run (diffed into registry.diff).
+#            HKCU -> $WINEPREFIX/user.reg, HKLM -> $WINEPREFIX/system.reg.
+# harvest    Globs (relative to drive_c) of the app's own log files. Matches
+#            modified during the run are copied into <run>/app_logs/.
+
+[common]
+registry = [
+  'HKCU\Software\Wine',
+  'HKLM\Software\Wine\Ports',
+]
+
+[divesight]
+name = "AP DiveSight"
+exe = 'C:\Program Files (x86)\AP\AP DiveSight\AP DiveSight.exe'
+framework = "Qt 6, x86-64, QSerialPort, custom qInstallMessageHandler"
+registry = ['HKCU\Software\AP\APDiveSight']
+harvest = [
+  "users/*/AppData/Local/AP/APDiveSight/*.log",   # AP_DiveSight_YYYY_MM_DD.log (encrypted)
+  "Program Files (x86)/AP/AP DiveSight/*.log",
+]
+
+[communicator]
+name = "AP Communicator"
+exe = 'C:\Program Files (x86)\AP\AP Communicator\APCommunicator.exe'
+framework = "MFC 8 (VS2005), i386, raw \\\\.\\COM%d serial, Silabs slab_usb_spi.dll"
+registry = ['HKCU\Software\AP\APCommunicator']
+harvest = [
+  "ProgramData/AP/**/*",                          # StatusLog.txt (plaintext, honours Message Level)
+  "users/*/AppData/Local/AP/**/*.log",
+  "users/*/AppData/Roaming/AP/**/*.log",
+  "Program Files (x86)/AP/AP Communicator/*.log",
+  "Program Files (x86)/AP/AP Communicator/*.txt",
+]
